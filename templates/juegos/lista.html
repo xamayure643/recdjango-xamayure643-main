@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo de Juegos - YaListas{% endblock %}
+
+{% block content %}
+    <h1>Listado de Juegos</h1>
+
+    {% if user.is_staff %}
+        <div style="margin-bottom: 20px;">
+            <a href="{% url 'juegos:crear' %}"><button>+ Crear Nuevo Juego</button></a>
+        </div>
+    {% endif %}
+
+    <ul>
+        {% for juego in juegos %}
+            <li>
+                <h3>
+                    <a href="{% url 'juegos:detalle' pk=juego.pk %}">{{ juego.nombre }}</a> 
+                    <small>({{ juego.get_pegi_display }})</small>
+                </h3>                
+                
+                {% if user.is_staff %}
+                    <div>
+                        <a href="{% url 'juegos:editar' pk=juego.pk %}"><button>Editar</button></a>
+                        <a href="{% url 'juegos:eliminar' pk=juego.pk %}"><button>Borrar</button></a>
+                    </div>
+                {% endif %}
+            </li>
+        {% empty %}
+            <p>Aún no hay juegos en el catálogo</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

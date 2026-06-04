@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión - YaListas{% endblock %}
+
+{% block content %}
+    <div>
+        <h2>Inicia Sesión</h2>
+        
+        <form method="post" action="">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+
+            <button type="submit">Entrar</button>
+        </form>
+
+        <p>¿No tienes cuenta? <a href="{% url 'usuarios:registro' %}">Regístrate aquí</a>.</p>
+    </div>
+{% endblock %}

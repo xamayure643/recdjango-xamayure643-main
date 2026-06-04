@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if object %}Editar {{ object.nombre }}{% else %}Crear Nuevo Juego{% endif %} - YaListas
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h2>
+            {% if object %}
+                Editar Juego: {{ object.nombre }}
+            {% else %}
+                Crear Nuevo Juego
+            {% endif %}
+        </h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {{ form.as_p }}
+            
+            <div>
+                <button type="submit">
+                    {% if object %}Guardar Cambios{% else %}Añadir al Catálogo{% endif %}
+                </button>
+                <a href="{% url 'juegos:lista' %}">Cancelar</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

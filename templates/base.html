@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}YaListas{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <nav>
+    <h2>YaListas</h2>
+    <ul>
+        <li><a href="{% url 'juegos:lista' %}">Catálogo</a></li>
+        
+        {% if user.is_authenticated %}
+            <li>Hola, {{ user.username }}</li>
+            <li>
+                <form action="{% url 'usuarios:logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Cerrar Sesión</button>
+                </form>
+            </li>
+            
+        {% else %}
+            <li>Invitado</li>
+            <li><a href="{% url 'usuarios:login' %}">Iniciar Sesión</a></li>
+            <li><a href="{% url 'usuarios:registro' %}">Registrarse</a></li>
+        {% endif %}
+    </ul>
+</nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 - YaListas</p>
+    </footer>
+</body>
+</html>

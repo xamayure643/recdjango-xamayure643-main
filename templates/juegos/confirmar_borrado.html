@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar {{ object.nombre }} - YaListas{% endblock %}
+
+{% block content %}
+    <div>
+        <h2>Confirmación de Borrado</h2>
+        
+        <p>¿Estás completamente seguro de que deseas eliminar el juego <strong>"{{ object.nombre }}"</strong>?</p>
+        <p style="color: red;">Esta acción es irreversible y borrará también las listas de usuarios y opiniones asociadas al juego.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" style="background-color: red; color: white;">Sí, Eliminar</button>
+            <a href="{% url 'juegos:lista' %}">NO, Cancelar y volver atrás</a>
+        </form>
+    </div>
+{% endblock %}

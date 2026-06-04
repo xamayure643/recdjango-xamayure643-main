@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ juego.nombre }} - YaListas{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>{{ juego.nombre }}</h1>
+        <p><strong>PEGI:</strong> {{ juego.get_pegi_display }} | <strong>Fecha de lanzamiento:</strong> {{ juego.fecha_lanzamiento }}</p>
+        
+        <p><strong>Nota Media:</strong> {{ juego.puntuacion_media_global }}/10</p>
+
+        <div>
+            <strong>Categorías:</strong>
+            <ul>
+                {% for categoria in juego.categorias.all %}
+                    <li>{{ categoria.nombre }}</li>
+                {% empty %}
+                    <li>Sin categorías</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div>
+            <strong>Plataformas:</strong>
+            <ul>
+                {% for plataforma in juego.plataformas.all %}
+                    <li>{{ plataforma.nombre }}</li>
+                {% empty %}
+                    <li>Sin plataformas</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h3>Descripción</h3>
+        <p>{{ juego.descripcion }}</p>
+    </div>
+
+    <hr>
+    
+    <h3>¿Cómo voy con este juego?</h3>
+    {% if user.is_authenticated %}
+        <form action="{% url 'juegos:cambiar_estado' juego.pk %}" method="post">
+            {% csrf_token %}
+            <button type="submit" name="estado" value="PENDIENTE" 
+                {% if mi_estado.estado == 'PENDIENTE' %}style="background-color: yellow;"{% endif %}>
+                Quiero Jugarlo
+            </button>
+            
+            <button type="submit" name="estado" value="EN_CURSO"
+                {% if mi_estado.estado == 'EN_CURSO' %}style="background-color: lightgreen;"{% endif %}>
+                Jugando Ahora
+            </button>
+            
+            <button type="submit" name="estado" value="COMPLETADO"
+                {% if mi_estado.estado == 'COMPLETADO' %}style="background-color: darkgreen; color: white;"{% endif %}>
+                Completado
+            </button>
+
+            {% if mi_estado %}
+                <button type="submit" name="estado" value="ELIMINAR" style="color: red;">Quitar de mis listas</button>
+            {% endif %}
+        </form>
+    {% else %}
+        <p><a href="{% url 'usuarios:login' %}">Inicia sesión</a> para añadir este juego a tus listas.</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Mi Opinión</h2>
+    {% if user.is_authenticated %}
+        <form action="{% url 'juegos:guardar_opinion' juego.pk %}" method="post">
+            {% csrf_token %}
+            {{ opinion_form.as_p }}
+            
+            {% if not mi_opinion %}
+                <button type="submit" name="guardar">Guardar (Privado)</button>
+                <button type="submit" name="compartir">Guardar y compartir con el resto</button>
+            
+            {% else %}
+                <button type="submit" name="guardar">Guardar cambios</button>
+                
+                {% if mi_opinion.compartir_en_comentarios %}
+                    <button type="submit" name="privar">Dejar de compartir</button>
+                {% else %}
+                    <button type="submit" name="compartir">Compartir con el resto</button>
+                {% endif %}
+                
+            {% endif %}
+        </form>
+    {% else %}
+        <p><a href="{% url 'usuarios:login' %}">Inicia sesión</a> para dejar tu opinión.</p>
+    {% endif %}
+
+    <h2>Opiniones de la Comunidad</h2>
+    <ul>
+        {% for opinion in juego.opiniones.all %}
+            {% if opinion.compartir_en_comentarios %}
+                <li>
+                    <strong>{{ opinion.usuario.username }}</strong> le da un {{ opinion.nota_general }}/10:
+                    <p>"{{ opinion.texto_opinion }}"</p>
+                </li>
+            {% endif %}
+        {% empty %}
+            <p>Nadie ha opinado sobre este juego todavía.</p>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="{% url 'juegos:lista' %}">Volver al catálogo</a>
+{% endblock %}
