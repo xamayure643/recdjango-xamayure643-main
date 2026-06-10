@@ -10,5 +10,4 @@ class RegistroForm(UserCreationForm):
 class PerfilForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        # Elegimos los campos que el usuario podrá editar
         fields = ['username', 'foto_perfil', 'privacidad']

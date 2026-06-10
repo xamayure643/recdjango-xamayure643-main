@@ -20,7 +20,7 @@
             {% if user == perfil_usuario %}
                 <a href="{% url 'usuarios:perfil_editar' %}"><button>Editar mi perfil</button></a>
             {% else %}
-                <form action="{% url 'usuarios:toggle_seguir' pk=perfil_usuario.pk %}" method="post" style="display: inline-block;">
+                <form action="{% url 'usuarios:alternar_seguir' pk=perfil_usuario.pk %}" method="post" style="display: inline-block;">
                     {% csrf_token %}
                     {% if lo_sigue %}
                         <button type="submit" style="background-color: red; color: white;">Dejar de seguir</button>
