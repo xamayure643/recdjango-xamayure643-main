@@ -1,0 +1,248 @@
+/* static/css/base.css */
+
+:root {
+    /* Paleta Gaming - Tema Claro */
+    --bg-color: #f3f4f6;      /* Fondo principal gris muy suave */
+    --bg-card: #ffffff;       /* Fondo blanco puro para las tarjetas */
+    --text-main: #111827;     /* Texto principal casi negro */
+    --text-muted: #6b7280;    /* Texto secundario gris */
+    --accent-color: #6366f1;  /* Índigo vibrante (estilo Discord/Twitch) */
+    --accent-hover: #4f46e5;  /* Índigo más oscuro para hover */
+    --border-color: #e5e7eb;  /* Gris claro para bordes */
+    
+    /* Colores para las etiquetas (Tags) */
+    --badge-bg: #e0e7ff;      /* Fondo índigo muy claro */
+    --badge-text: #3730a3;    /* Texto índigo oscuro */
+    --badge-border: #c7d2fe;
+    
+    /* Sombras dinámicas */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    
+    /* Tipografía */
+    --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+    --container-max-width: 1050px;
+}
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* =========================================
+   1. NAVEGACIÓN Y ESTRUCTURA
+   ========================================= */
+header {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav h2 {
+    color: var(--text-main);
+    font-size: 1.8rem;
+    margin: 0;
+    letter-spacing: -1px;
+    font-weight: 800;
+}
+
+nav h2::after {
+    content: '.';
+    color: var(--accent-color);
+}
+
+main {
+    max-width: var(--container-max-width);
+    margin: 2.5rem auto;
+    padding: 0 20px;
+    flex: 1;
+    width: 100%;
+}
+
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    margin-top: auto;
+    font-size: 0.9rem;
+}
+
+/* =========================================
+   2. TIPOGRAFÍA Y ENLACES
+   ========================================= */
+h1, h2, h3 {
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-weight: 600;
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+nav ul a {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+nav ul a:hover {
+    color: var(--accent-color);
+}
+
+/* =========================================
+   3. BOTONES Y FORMULARIOS
+   ========================================= */
+button, .btn, input[type="submit"] {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+button:hover, .btn:hover, input[type="submit"]:hover {
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1.2rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 6px;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* =========================================
+   4. LISTAS (Sin puntos y en forma de tarjeta)
+   ========================================= */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Tarjetas para el catálogo principal */
+main > ul {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 1rem;
+}
+
+main > ul > li {
+    background-color: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--accent-color); /* Toque de color a la izquierda */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+main > ul > li:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+main > ul > li h3 {
+    margin-bottom: 0.2rem;
+}
+
+main > ul > li small {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: normal;
+}
+
+/* ETIQUETAS (TAGS) PARA CATEGORÍAS Y PLATAFORMAS */
+div > strong + ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    margin-bottom: 1.5rem;
+}
+
+div > strong + ul > li {
+    background-color: var(--badge-bg);
+    border: 1px solid var(--badge-border);
+    color: var(--badge-text);
+    padding: 4px 14px;
+    border-radius: 20px; /* Forma de píldora */
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+div > strong + ul > li:hover {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: var(--border-color);
+    margin: 2.5rem 0;
+}
