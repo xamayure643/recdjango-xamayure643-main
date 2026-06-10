@@ -96,7 +96,7 @@
         {% for opinion in juego.opiniones.all %}
             {% if opinion.compartir_en_comentarios %}
                 <li>
-                    <strong>{{ opinion.usuario.username }}</strong> le da un {{ opinion.nota_general }}/10:
+                    <strong><a href="{% url 'usuarios:perfil_detalle' pk=opinion.usuario.pk %}">{{ opinion.usuario.username }}</a></strong> le da un {{ opinion.nota_general }}/10:
                     <p>"{{ opinion.texto_opinion }}"</p>
                 </li>
             {% endif %}

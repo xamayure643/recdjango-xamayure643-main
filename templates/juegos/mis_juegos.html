@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Juegos - YaListas{% endblock %}
+
+{% block content %}
+    <h1>Mis Juegos</h1>
+
+    <div>
+        <a href="{% url 'juegos:mis_juegos' %}">
+            <button {% if estado_actual == 'TODO' %}style="background-color: #ddd;"{% endif %}>Todo</button>
+        </a>
+        <a href="{% url 'juegos:mis_juegos' %}?estado=PENDIENTE">
+            <button {% if estado_actual == 'PENDIENTE' %}style="background-color: yellow;"{% endif %}>Pendientes</button>
+        </a>
+        <a href="{% url 'juegos:mis_juegos' %}?estado=EN_CURSO">
+            <button {% if estado_actual == 'EN_CURSO' %}style="background-color: lightgreen;"{% endif %}>En Curso</button>
+        </a>
+        <a href="{% url 'juegos:mis_juegos' %}?estado=COMPLETADO">
+            <button {% if estado_actual == 'COMPLETADO' %}style="background-color: darkgreen; color: white;"{% endif %}>Completados</button>
+        </a>
+    </div>
+
+    <ul>
+        {% for item in mis_estados %}
+            <li>
+                <h3>
+                    <a href="{% url 'juegos:detalle' pk=item.juego.pk %}">{{ item.juego.nombre }} {% if not request.GET.estado %}({{ item.get_estado_display }}){% endif %}</a>
+                    
+                </h3>
+            </li>
+        {% empty %}
+            <p>No tienes juegos en esta lista.</p>
+        {% endfor %}
+    </ul>
+
+    {% if is_paginated %}
+    <div>
+        <span>
+            {% if page_obj.has_previous %}
+                <a href="?page=1{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}">&laquo; primera</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}">anterior</a>
+            {% endif %}
+
+            <span>
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}">siguiente</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}">última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+
+{% endblock %}

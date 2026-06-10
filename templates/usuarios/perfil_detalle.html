@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Perfil de {{ perfil_usuario.username }}{% endblock %}
+
+{% block content %}
+    <div style="text-align: center; margin-bottom: 30px;">
+        {% if perfil_usuario.foto_perfil %}
+            <img src="{{ perfil_usuario.foto_perfil }}" alt="Foto de {{ perfil_usuario.username }}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+        {% else %}
+            <img src="https://via.placeholder.com/150" alt="Sin foto" style="border-radius: 50%;">
+        {% endif %}
+        
+        <h2>{{ perfil_usuario.username }}</h2>
+
+        {% if son_amigos %}
+            <p style="color: green; font-weight: bold;">🌟 Sois Amigos</p>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            {% if user == perfil_usuario %}
+                <a href="{% url 'usuarios:perfil_editar' %}"><button>Editar mi perfil</button></a>
+            {% else %}
+                <form action="{% url 'usuarios:toggle_seguir' pk=perfil_usuario.pk %}" method="post" style="display: inline-block;">
+                    {% csrf_token %}
+                    {% if lo_sigue %}
+                        <button type="submit" style="background-color: red; color: white;">Dejar de seguir</button>
+                    {% else %}
+                        <button type="submit" style="background-color: blue; color: white;">Seguir</button>
+                    {% endif %}
+                </form>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    {% if puede_ver %}
+        <hr>
+        <h3>Juegos de {{ perfil_usuario.username }}</h3>
+        
+        <div style="margin-bottom: 20px;">
+            <a href="{% url 'usuarios:perfil_detalle' pk=perfil_usuario.pk %}">
+                <button {% if estado_actual == 'TODO' %}style="background-color: #ddd;"{% endif %}>Todo</button>
+            </a>
+            <a href="{% url 'usuarios:perfil_detalle' pk=perfil_usuario.pk %}?estado=PENDIENTE">
+                <button {% if estado_actual == 'PENDIENTE' %}style="background-color: yellow;"{% endif %}>Pendientes</button>
+            </a>
+            <a href="{% url 'usuarios:perfil_detalle' pk=perfil_usuario.pk %}?estado=EN_CURSO">
+                <button {% if estado_actual == 'EN_CURSO' %}style="background-color: lightgreen;"{% endif %}>En Curso</button>
+            </a>
+            <a href="{% url 'usuarios:perfil_detalle' pk=perfil_usuario.pk %}?estado=COMPLETADO">
+                <button {% if estado_actual == 'COMPLETADO' %}style="background-color: darkgreen; color: white;"{% endif %}>Completados</button>
+            </a>
+        </div>
+
+        <ul>
+            {% for item in page_obj %}
+                <li>
+                    <h3>
+                        <a href="{% url 'juegos:detalle' pk=item.juego.pk %}">{{ item.juego.nombre }}</a> 
+                    </h3>
+                    <p>Estado actual: <strong>{{ item.get_estado_display }}</strong></p>
+                </li>
+            {% empty %}
+                <p>Este usuario no tiene juegos en esta lista.</p>
+            {% endfor %}
+        </ul>
+
+        {% if page_obj.has_other_pages %}
+        <div style="margin-top: 20px;">
+            <span>
+                {% if page_obj.has_previous %}
+                    <a href="?page=1{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}">&laquo; primera</a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}">anterior</a>
+                {% endif %}
+
+                <span style="margin: 0 10px;">
+                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}">siguiente</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.estado %}&estado={{ request.GET.estado }}{% endif %}">última &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+
+    {% else %}
+        <div style="text-align: center; margin-top: 50px; color: #888;">
+            <p>🔒 El perfil de este usuario es privado o requiere que os sigáis mutuamente.</p>
+        </div>
+    {% endif %}
+{% endblock %}

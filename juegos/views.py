@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .models import Juego, Opinion, EstadoJuego
 from .forms import JuegoForm, OpinionForm
@@ -29,6 +29,7 @@ class JuegoListView(ListView):
     model = Juego
     template_name = 'juegos/lista.html'
     context_object_name = 'juegos'
+    paginate_by = 10
 
 class JuegoDetailView(DetailView):
     model = Juego
@@ -86,3 +87,23 @@ def guardar_opinion(request, pk):
                 
             info_opinion.save()
             return redirect('juegos:detalle', pk=juego.pk)
+        
+class MisJuegosView(LoginRequiredMixin, ListView):
+    model = EstadoJuego
+    template_name = 'juegos/mis_juegos.html'
+    context_object_name = 'mis_estados'
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = EstadoJuego.objects.filter(usuario=self.request.user)
+        
+        estado = self.request.GET.get('estado')
+        if estado in ['PENDIENTE', 'EN_CURSO', 'COMPLETADO']:
+            queryset = queryset.filter(estado=estado)
+            
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['estado_actual'] = self.request.GET.get('estado', 'TODO')
+        return context

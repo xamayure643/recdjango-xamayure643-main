@@ -12,7 +12,10 @@
         <li><a href="{% url 'juegos:lista' %}">Catálogo</a></li>
         
         {% if user.is_authenticated %}
-            <li>Hola, {{ user.username }}</li>
+            <li>Hola, <a href="{% url 'usuarios:perfil_detalle' pk=user.pk %}">{{ user.username }}</a></li>
+            <li>
+                <a href="{% url 'juegos:mis_juegos' %}">Mis Juegos</a>
+            </li>
             <li>
                 <form action="{% url 'usuarios:logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}

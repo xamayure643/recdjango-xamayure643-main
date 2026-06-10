@@ -5,6 +5,7 @@ app_name = 'juegos'
 
 urlpatterns = [
     path('', views.JuegoListView.as_view(), name='lista'), 
+    path('mis-juegos/', views.MisJuegosView.as_view(), name='mis_juegos'),
     path('<int:pk>/', views.JuegoDetailView.as_view(), name='detalle'),
     path('crear/', views.JuegoCreateView.as_view(), name='crear'),
     path('<int:pk>/editar/', views.JuegoUpdateView.as_view(), name='editar'), 
