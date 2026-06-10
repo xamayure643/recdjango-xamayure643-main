@@ -12,4 +12,6 @@ urlpatterns = [
     path('<int:pk>/eliminar/', views.JuegoDeleteView.as_view(), name='eliminar'),
     path('<int:pk>/opinion/', views.guardar_opinion, name='guardar_opinion'),
     path('<int:pk>/cambiar-estado/', views.cambiar_estado, name='cambiar_estado'),
+    path('categorias/añadir/', views.GestionarCategoriasView.as_view(), name='gestionar_categorias'),
+    path('plataformas/añadir/', views.GestionarPlataformasView.as_view(), name='gestionar_plataformas'),
 ]

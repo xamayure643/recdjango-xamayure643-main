@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ titulo }} - YaListas{% endblock %}
+
+{% block content %}
+    <div>
+        <h2>{{ titulo }}</h2>
+        <p>Añade múltiples elementos rellenando las cajas. Deja en blanco los que no necesites.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+                {% for form in formset %}
+                    <div style="background-color: var(--bg-card); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                        {{ form.as_p }}
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div style="margin-top: 25px;">
+                <button type="submit">Guardar</button>
+                <a href="{% url 'juegos:lista' %}" style="margin-left: 15px;">Cancelar</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

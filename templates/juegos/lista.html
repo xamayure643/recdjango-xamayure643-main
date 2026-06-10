@@ -8,6 +8,8 @@
     {% if user.is_staff %}
         <div style="margin-bottom: 20px;">
             <a href="{% url 'juegos:crear' %}"><button>+ Crear Nuevo Juego</button></a>
+            <a href="{% url 'juegos:gestionar_categorias' %}"><button style="background-color: var(--badge-text);">+ Añadir Categorías</button></a>
+            <a href="{% url 'juegos:gestionar_plataformas' %}"><button style="background-color: var(--badge-text);">+ Añadir Plataformas</button></a>
         </div>
     {% endif %}
 

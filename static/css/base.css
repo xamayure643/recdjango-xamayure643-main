@@ -163,6 +163,51 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* =========================================
+   EXCEPCIONES PARA CHECKBOXES Y RADIOS
+   ========================================= */
+input[type="checkbox"], 
+input[type="radio"] {
+    width: auto; /* Quitamos el 100% de ancho */
+    margin-bottom: 0;
+    cursor: pointer;
+    box-shadow: none; /* Evitamos que tengan sombra de botón */
+    transform: translateY(1px); /* Ajuste milimétrico para alinearlo al centro del texto */
+}
+
+/* Django mete los CheckboxSelectMultiple en listas <ul>. 
+   Las ponemos en formato flex para que se coloquen en cuadrícula */
+form ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px 25px; /* 15px de separación vertical, 25px horizontal */
+    margin-bottom: 1.2rem;
+    padding: 0;
+}
+
+form ul li {
+    display: flex;
+    align-items: center; /* Centra el checkbox con la palabra */
+    gap: 8px; /* Espacio entre el cuadradito y el texto */
+    
+    /* Reseteamos por si acaso hereda el diseño de tarjeta de los juegos */
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+form ul li:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+form ul li label {
+    cursor: pointer;
+    color: var(--text-main);
+    font-size: 0.95rem;
+}
+
+/* =========================================
    4. LISTAS (Sin puntos y en forma de tarjeta)
    ========================================= */
 ul {

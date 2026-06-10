@@ -1,10 +1,11 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views import View
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from .models import Juego, Opinion, EstadoJuego
-from .forms import JuegoForm, OpinionForm
+from .models import Juego, Opinion, EstadoJuego, Categoria, Plataforma
+from .forms import JuegoForm, OpinionForm, CategoriaFormSet, PlataformaFormSet
 
 @login_required
 def cambiar_estado(request, pk):
@@ -51,6 +52,34 @@ class JuegoDetailView(DetailView):
 class SoloAdminMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_staff
+
+class GestionarCategoriasView(SoloAdminMixin, View):
+    template_name = 'juegos/gestionar_extras.html'
+
+    def get(self, request):
+        formset = CategoriaFormSet(queryset=Categoria.objects.none())
+        return render(request, self.template_name, {'formset': formset, 'titulo': 'Añadir Categorías Múltiples'})
+
+    def post(self, request):
+        formset = CategoriaFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('juegos:lista')
+        return render(request, self.template_name, {'formset': formset, 'titulo': 'Añadir Categorías Múltiples'})
+
+class GestionarPlataformasView(SoloAdminMixin, View):
+    template_name = 'juegos/gestionar_extras.html'
+
+    def get(self, request):
+        formset = PlataformaFormSet(queryset=Plataforma.objects.none())
+        return render(request, self.template_name, {'formset': formset, 'titulo': 'Añadir Plataformas Múltiples'})
+
+    def post(self, request):
+        formset = PlataformaFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            return redirect('juegos:lista')
+        return render(request, self.template_name, {'formset': formset, 'titulo': 'Añadir Plataformas Múltiples'})
 
 class JuegoCreateView(SoloAdminMixin, CreateView):
     model = Juego
