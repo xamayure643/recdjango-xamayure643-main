@@ -9,7 +9,15 @@
 <body>
     <header>
         <nav>
-    <h2>YaListas</h2>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                
+                <div style="font-size: 0.75rem; color: var(--text-muted); display: flex; flex-direction: column; line-height: 1.2; text-align: right; border-right: 2px solid var(--border-color); padding-right: 15px;">
+                    <span>🎮 <strong>{{ total_juegos_web }}</strong> Juegos</span>
+                    <span>👥 <strong>{{ total_usuarios_web }}</strong> Usuarios</span>
+                </div>
+
+                <h2>YaListas</h2>
+            </div>
     <ul>
         <li><a href="{% url 'juegos:lista' %}">Catálogo</a></li>
         

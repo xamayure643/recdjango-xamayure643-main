@@ -16,24 +16,30 @@
     <ul>
         {% for juego in juegos %}
             <li>
-                <h3>
-                    <a href="{% url 'juegos:detalle' pk=juego.pk %}">{{ juego.nombre }}</a> 
-                    <small>({{ juego.get_pegi_display }})</small>
-                </h3>                
-                
-                {% if user.is_staff %}
-                    <div>
-                        <a href="{% url 'juegos:editar' pk=juego.pk %}"><button>Editar</button></a>
-                        <a href="{% url 'juegos:eliminar' pk=juego.pk %}"><button>Borrar</button></a>
+                <div>
+                    <h3>
+                        <a href="{% url 'juegos:detalle' pk=juego.pk %}">{{ juego.nombre }}</a> 
+                        <small>({{ juego.get_pegi_display }})</small>
+                    </h3>
+                    {% if user.is_staff %}
+                        <div>
+                            <a href="{% url 'juegos:editar' pk=juego.pk %}"><button>Editar</button></a>
+                            <a href="{% url 'juegos:eliminar' pk=juego.pk %}"><button>Borrar</button></a>
+                        </div>
+                    {% endif %}               
+                    <div style="margin-top: 5px; font-size: 0.9em; color: var(--text-muted);">
+                        <span>👥 En las listas de <strong>{{ juego.veces_en_listas }}</strong> usuarios</span> | 
+                        <span>💬 <strong>{{ juego.total_opiniones }}</strong> opiniones</span> |
+                        <span>⭐ Media: <strong>{{ juego.puntuacion_media|default:0|floatformat:1 }}</strong>/10</span>
                     </div>
-                {% endif %}
+                </div>
             </li>
         {% empty %}
             <p>Aún no hay juegos en el catálogo</p>
         {% endfor %}
     </ul>
 
-    <div">
+    <div>
         <span>
             {% if page_obj.has_previous %}
                 <a href="?page=1">&laquo; primera</a>

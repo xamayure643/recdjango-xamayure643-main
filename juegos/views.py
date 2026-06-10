@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .models import Juego, Opinion, EstadoJuego, Categoria, Plataforma
 from .forms import JuegoForm, OpinionForm, CategoriaFormSet, PlataformaFormSet
+from django.db.models import Count, Avg, F
+from usuarios.models import Usuario
 
 @login_required
 def cambiar_estado(request, pk):
@@ -32,10 +34,33 @@ class JuegoListView(ListView):
     context_object_name = 'juegos'
     paginate_by = 10
 
+    def get_queryset(self):
+        queryset = Juego.objects.annotate(
+            veces_en_listas=Count('en_listas_usuarios', distinct=True),
+            total_opiniones=Count('opiniones', distinct=True),
+            puntuacion_media=Avg(
+                (F('opiniones__nota_gameplay') + 
+                 F('opiniones__nota_sonido') + 
+                 F('opiniones__nota_banda_sonora') + 
+                 F('opiniones__nota_historia')) / 4.0
+            )
+        )
+        return queryset
+
 class JuegoDetailView(DetailView):
     model = Juego
     template_name = 'juegos/detalle.html'
     context_object_name = 'juego'
+
+    def get_queryset(self):
+        return Juego.objects.annotate(
+            puntuacion_media=Avg(
+                (F('opiniones__nota_gameplay') + 
+                 F('opiniones__nota_sonido') + 
+                 F('opiniones__nota_banda_sonora') + 
+                 F('opiniones__nota_historia')) / 4.0
+            )
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -136,3 +161,12 @@ class MisJuegosView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['estado_actual'] = self.request.GET.get('estado', 'TODO')
         return context
+    
+def estadisticas_globales(request):
+    total_juegos = Juego.objects.aggregate(total=Count('id'))['total']
+    total_usuarios = Usuario.objects.aggregate(total=Count('id'))['total']
+    
+    return {
+        'total_juegos_web': total_juegos,
+        'total_usuarios_web': total_usuarios,
+    }

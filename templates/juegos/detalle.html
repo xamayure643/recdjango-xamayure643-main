@@ -7,7 +7,7 @@
         <h1>{{ juego.nombre }}</h1>
         <p><strong>PEGI:</strong> {{ juego.get_pegi_display }} | <strong>Fecha de lanzamiento:</strong> {{ juego.fecha_lanzamiento }}</p>
         
-        <p><strong>Nota Media:</strong> {{ juego.puntuacion_media_global }}/10</p>
+        <p><strong>Nota Media:</strong> {{ juego.puntuacion_media|default:0|floatformat:1 }}/10</p>
 
         <div>
             <strong>Categorías:</strong>
@@ -95,10 +95,12 @@
     <ul>
         {% for opinion in juego.opiniones.all %}
             {% if opinion.compartir_en_comentarios %}
-                <li>
+            <li>
+                <div>
                     <strong><a href="{% url 'usuarios:perfil_detalle' pk=opinion.usuario.pk %}">{{ opinion.usuario.username }}</a></strong> le da un {{ opinion.nota_general }}/10:
                     <p>"{{ opinion.texto_opinion }}"</p>
-                </li>
+                </div>
+            </li>
             {% endif %}
         {% empty %}
             <p>Nadie ha opinado sobre este juego todavía.</p>

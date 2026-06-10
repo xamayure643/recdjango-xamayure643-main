@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Perfil de {{ perfil_usuario.username }}{% endblock %}
+{% block title %}Perfil de {{ perfil_usuario.username }} - YaListas{% endblock %}
 
 {% block content %}
     <div style="text-align: center; margin-bottom: 30px;">
@@ -55,9 +55,8 @@
             {% for item in page_obj %}
                 <li>
                     <h3>
-                        <a href="{% url 'juegos:detalle' pk=item.juego.pk %}">{{ item.juego.nombre }}</a> 
+                        <a href="{% url 'juegos:detalle' pk=item.juego.pk %}">{{ item.juego.nombre }} {% if not request.GET.estado %} ({{ item.get_estado_display }}) {% endif %}</a> 
                     </h3>
-                    <p>Estado actual: <strong>{{ item.get_estado_display }}</strong></p>
                 </li>
             {% empty %}
                 <p>Este usuario no tiene juegos en esta lista.</p>

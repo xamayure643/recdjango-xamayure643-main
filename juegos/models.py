@@ -36,15 +36,6 @@ class Juego(models.Model):
     def __str__(self):
         return self.nombre
 
-    @property
-    def puntuacion_media_global(self):
-        opiniones = self.opiniones.all()
-        if opiniones.exists():
-            total = sum([op.nota_general for op in opiniones])
-            return round(total / opiniones.count(), 2)
-        return 0
-
-
 class EstadoJuego(models.Model):
     OPCIONES_ESTADO = [
         ('PENDIENTE', 'Pendiente'),
