@@ -2,14 +2,13 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class Usuario(AbstractUser):
-    OPCIONES_PRIVACIDAD = [
-        ('TODOS', 'Todos'),
-        ('NADIE', 'Nadie'),
-        ('AMIGOS', 'Solo Amigos'),
-    ]
-    
+    class Privacidad(models.TextChoices):
+        TODOS = 'TODOS', 'Todos'
+        NADIE = 'NADIE', 'Nadie'
+        AMIGOS = 'AMIGOS', 'Solo Amigos'
+
     foto_perfil = models.URLField(max_length=500, blank=True, null=True, default="https://via.placeholder.com/150")
-    privacidad = models.CharField(max_length=10, choices=OPCIONES_PRIVACIDAD, default='TODOS')
+    privacidad = models.CharField(max_length=10, choices=Privacidad.choices, default=Privacidad.TODOS)
 
     def __str__(self):
         return self.username

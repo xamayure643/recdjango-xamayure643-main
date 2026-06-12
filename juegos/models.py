@@ -17,17 +17,16 @@ class Plataforma(models.Model):
 
 
 class Juego(models.Model):
-    CALIFICACIONES_EDAD = [
-        ('PEGI3', 'PEGI 3'),
-        ('PEGI7', 'PEGI 7'),
-        ('PEGI12', 'PEGI 12'),
-        ('PEGI16', 'PEGI 16'),
-        ('PEGI18', 'PEGI 18'),
-    ]
+    class Pegi(models.TextChoices):
+        PEGI3 = 'PEGI3', 'PEGI 3'
+        PEGI7 = 'PEGI7', 'PEGI 7'
+        PEGI12 = 'PEGI12', 'PEGI 12'
+        PEGI16 = 'PEGI16', 'PEGI 16'
+        PEGI18 = 'PEGI18', 'PEGI 18'
 
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField()
-    pegi = models.CharField(max_length=10, choices=CALIFICACIONES_EDAD, default='PEGI3')
+    pegi = models.CharField(max_length=10, choices=Pegi.choices, default=Pegi.PEGI3)
     fecha_lanzamiento = models.DateField()
 
     categorias = models.ManyToManyField(Categoria, related_name='juegos')
@@ -37,17 +36,16 @@ class Juego(models.Model):
         return self.nombre
 
 class EstadoJuego(models.Model):
-    OPCIONES_ESTADO = [
-        ('PENDIENTE', 'Pendiente'),
-        ('EN_CURSO', 'En curso'),
-        ('COMPLETADO', 'Completado'),
-    ]
-    
+    class Estado(models.TextChoices):
+        PENDIENTE = 'PENDIENTE', 'Pendiente'
+        EN_CURSO = 'EN_CURSO', 'En curso'
+        COMPLETADO = 'COMPLETADO', 'Completado'
+
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='mis_listas')
 
     juego = models.ForeignKey(Juego, on_delete=models.CASCADE, related_name='en_listas_usuarios')
 
-    estado = models.CharField(max_length=15, choices=OPCIONES_ESTADO)
+    estado = models.CharField(max_length=15, choices=Estado.choices)
     es_favorito = models.BooleanField(default=False)
 
     class Meta:

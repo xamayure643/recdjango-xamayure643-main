@@ -15,10 +15,8 @@ def cambiar_estado(request, pk):
     
     if request.method == 'POST':
         nuevo_estado = request.POST.get('estado')
-        
-        opciones = ['PENDIENTE', 'EN_CURSO', 'COMPLETADO']
-        
-        if nuevo_estado in opciones:
+                
+        if nuevo_estado in EstadoJuego.Estado.values:
             estado_obj, _ = EstadoJuego.objects.get_or_create(usuario=request.user, juego=juego)
             estado_obj.estado = nuevo_estado
             estado_obj.save()
@@ -152,7 +150,7 @@ class MisJuegosView(LoginRequiredMixin, ListView):
         queryset = EstadoJuego.objects.filter(usuario=self.request.user)
         
         estado = self.request.GET.get('estado')
-        if estado in ['PENDIENTE', 'EN_CURSO', 'COMPLETADO']:
+        if estado in EstadoJuego.Estado.values:
             queryset = queryset.filter(estado=estado)
             
         return queryset

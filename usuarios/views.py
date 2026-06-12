@@ -42,11 +42,11 @@ class PerfilDetailView(DetailView):
 
         if visitante == perfil_usuario:
             puede_ver = True # Uno mismo siempre puede ver su perfil
-        elif perfil_usuario.privacidad == 'TODOS':
+        elif perfil_usuario.privacidad == Usuario.Privacidad.TODOS:
             puede_ver = True # Es público
-        elif perfil_usuario.privacidad == 'AMIGOS':
+        elif perfil_usuario.privacidad == Usuario.Privacidad.AMIGOS:
             puede_ver = son_amigos # Seguimiento mutuo necesario
-        elif perfil_usuario.privacidad == 'NADIE':
+        elif perfil_usuario.privacidad == Usuario.Privacidad.NADIE:
             puede_ver = False # Nadie excepto él mismo
 
         context['puede_ver'] = puede_ver
@@ -55,7 +55,7 @@ class PerfilDetailView(DetailView):
             juegos_queryset = EstadoJuego.objects.filter(usuario=perfil_usuario)
             
             estado = self.request.GET.get('estado')
-            if estado in ['PENDIENTE', 'EN_CURSO', 'COMPLETADO']:
+            if estado in EstadoJuego.Estado.values:
                 juegos_queryset = juegos_queryset.filter(estado=estado)
             
             context['estado_actual'] = estado if estado else 'TODO'
